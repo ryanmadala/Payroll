@@ -76,18 +76,35 @@ const EmployeeDataScreen = () => {
         setSelectedEmployees([]);
     };
 
-    const handleSendEmail = () => {
-        if (selectedEmployees.length === 0) {
-            alert('Please select employees to send email');
-            return;
-        }
+    const handleSendEmail = async () => {
+      if (selectedEmployees.length === 0) {
+        alert("Please select employees to send email");
+        return;
+      }
 
-        const selectedEmails = employeeData
-            .filter(emp => selectedEmployees.includes(emp.id))
-            .map(emp => emp.email)
-            .join(', ');
+      const selectedEmails = employeeData
+        .filter((emp) => selectedEmployees?.includes(emp?.id))
+        .map((emp) => emp?.email_id_reciepient);
 
-        alert(`Email would be sent to: ${selectedEmails}`);
+      const payload = selectedEmails?.map((email) => ({
+        email_id: email,
+      }));
+
+      try {
+        setDataSpinner(true);
+        const response = await axios.put(
+          `https://j66s8vv088.execute-api.ap-south-1.amazonaws.com/rmtool/ReqCSC`,
+          payload
+        );
+        setSelectedEmployees([])
+        alert(response?.data?.message)
+      } catch (error) {
+        console.error(error);
+      } finally {
+        setDataSpinner(false);
+      }
+
+      // alert(`Email would be sent to: ${selectedEmails}`);
     };
 
     const handleEmployeeSelect = (employeeId) => {
@@ -168,7 +185,7 @@ const EmployeeDataScreen = () => {
                     <div className="bg-white rounded-lg shadow-sm p-6 mb-6">
 
                        <div className="flex justify-between">
-                            <h1 className="text-2xl font-bold text-gray-900 mb-6 flex items-center gap-2">
+                            <h1 className="!text-xl font-bold text-gray-900 mb-6 flex items-center gap-2">
                                 <Users className="h-6 w-6 text-blue-600" />
                                 Singapore Payroll - Client Details
                             </h1>
@@ -181,7 +198,7 @@ const EmployeeDataScreen = () => {
                             </button>
                         </div> 
 
-                        <div className="flex flex-wrap items-center justify-between gap-4">
+                        <div className="flex flex-wrap items-center justify-between gap-4 mt-4">
 
                             <div className="flex items-center gap-4">
                                 <div className="flex items-center gap-2">
@@ -194,21 +211,21 @@ const EmployeeDataScreen = () => {
                                         id="date"
                                         value={selectedDate}
                                         onChange={(e) => setSelectedDate(e.target.value)}
-                                        className="px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                                        className="px-2 py-1 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                                     />
                                 </div>
 
                                 <div className="flex gap-2">
                                     <button
                                         onClick={handleFetch}
-                                        className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-colors"
+                                        className="bg-blue-600 text-white px-2 !rounded-[6px] text-[12px] h-[30px]"
                                     >
                                         Fetch Data
                                     </button>
 
                                     <button
                                         onClick={handleClear}
-                                        className="px-4 py-2 bg-stone-400 text-white  rounded-md hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 transition-colors flex items-center gap-1"
+                                        className="bg-stone-400 text-white px-2 !rounded-[6px] text-[12px] h-[30px] hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 transition-colors flex items-center gap-1"
                                     >
                                         <RotateCcw className="h-4 w-4" />
                                         Clear
@@ -220,7 +237,7 @@ const EmployeeDataScreen = () => {
                                 <button
                                     onClick={handleSendEmail}
                                     disabled={selectedEmployees.length === 0}
-                                    className="px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 transition-colors flex items-center gap-1 disabled:bg-gray-400 disabled:cursor-not-allowed"
+                                    className="bg-green-600 text-white px-2 !rounded-[6px] text-[12px] h-[30px] hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 transition-colors flex items-center gap-1 disabled:bg-gray-400 disabled:cursor-not-allowed"
                                 >
                                     <Mail className="h-4 w-4" />
                                     Send Email
@@ -238,7 +255,7 @@ const EmployeeDataScreen = () => {
                                     <button
                                         type="button"
                                         onClick={() => fileInputRef.current.click()}
-                                        className="px-4 py-2 bg-purple-600 text-white rounded-md hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2 transition-colors h-[40px] flex items-center gap-2"
+                                        className="bg-purple-600 text-white px-2 !rounded-[6px] text-[12px] h-[30px] hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2 transition-colors flex items-center gap-2"
                                     >
                                         <Upload className="h-4 w-4" />
                                         Upload File
@@ -283,7 +300,7 @@ const EmployeeDataScreen = () => {
                                 </div>
                             </div>
 
-                            <div className="overflow-x-auto">
+                            <div className="overflow-x-auto flex items-center">
                                 <table className="min-w-full divide-y divide-gray-200">
                                     <thead className="bg-gray-50">
                                         <tr>
@@ -365,7 +382,7 @@ const EmployeeDataScreen = () => {
                     )}
 
                     {!showData && !dataSpinner && (
-                        <div className="bg-white rounded-lg shadow-sm p-12 text-center">
+                        <div className="bg-white rounded-lg shadow-sm p-12 text-center mt-5">
                             <Calendar className="h-16 w-16 text-gray-300 mx-auto mb-4" />
                             <h3 className="text-lg font-medium text-gray-900 mb-2">No Data to Display</h3>
                             <p className="text-gray-500">Select a date and click "Fetch Data" to display employee information.</p>
