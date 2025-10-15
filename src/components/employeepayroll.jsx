@@ -76,6 +76,7 @@ const EmployeeDataScreen = () => {
         setSelectedEmployees([]);
     };
 
+
     const handleSendEmail = async () => {
       if (selectedEmployees.length === 0) {
         alert("Please select employees to send email");
@@ -84,10 +85,13 @@ const EmployeeDataScreen = () => {
 
       const selectedEmails = employeeData
         .filter((emp) => selectedEmployees?.includes(emp?.id))
-        .map((emp) => emp?.email_id_reciepient);
+        .map((emp) => emp);
+
+            console.log(selectedEmails)
 
       const payload = selectedEmails?.map((email) => ({
-        email_id: email,
+        email_id: email?.email_id_reciepient,
+        name: email?.name
       }));
 
       try {
