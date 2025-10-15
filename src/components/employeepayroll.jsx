@@ -286,9 +286,9 @@ const EmployeeDataScreen = () => {
                         <div className="bg-white rounded-lg shadow-sm overflow-hidden">
                             <div className="px-6 py-4 border-b border-gray-200">
                                 <div className="flex justify-between items-center">
-                                    <h2 className="text-lg font-semibold text-gray-900">
+                                    {/* <h2 className="!text-[14px] font-semibold text-gray-900">
                                         Client Notification(s) Data ({employeeData.length} records)
-                                    </h2>
+                                    </h2> */}
                                     <div className="flex items-center gap-2">
                                         <input
                                             type="checkbox"
